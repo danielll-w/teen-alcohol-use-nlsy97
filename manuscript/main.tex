@@ -1,0 +1,198 @@
+\documentclass[11pt]{article}
+
+%Various Packages for formatting
+\usepackage[utf8]{inputenc}
+\usepackage[hyphens]{xurl}
+\urlstyle{same}
+\usepackage{amsmath}
+\usepackage{lscape} 
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage{rotating}
+\usepackage{float}
+\usepackage{varwidth}
+
+\title{Teen Alcohol Use and Its Effect On Academics}
+
+\author{
+		Daniel Weiss\\	
+		Northwestern University\\	
+		March 2020
+}
+
+\date{}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+\clearpage \newpage
+\pagenumbering{arabic}
+
+\section*{Introduction}
+
+Underage drinking is one of the most common risk taking behaviors adolescents participate in. According to the Monitoring the Future Survey of 2019, an annual survey of 50,000 8th, 10th, and 12th graders, 8\% of 8th graders and 30\% of 12th graders drank during the past 30 days with 4\% and 12\% binge drinking in the last two weeks respectively \cite{nida}. With drinking comes short term consequences including impaired driving, risky sexual activity, and hangovers, but long term consequences may also follow. There is extensive literature both in medicine on how alcohol effects the development of the brain and in economics on how alcohol effects outcomes such as labor and education. For example, according to the CDC, underage drinking is linked with mediocre attendance and grades, addiction, later abuse of other drugs, and trouble socializing \cite{cdc2}. Developing an addiction early in life can lead to chronic use that makes finding employment and forming meaningful relationships difficult even past high school and college. Needless to say, the cost of alcohol and drug use can be very high for young people.  
+
+The purpose of this paper is to examine how alcohol use by teens affects their academic performance. The measure of academic performance we examine is grade point average. Given the importance of having a college degree on employment in today's day and age, anything that could have an impact on schooling should be of interest to policy makers. While it may seem obvious that drinking can have negative effects of students, undertaking an empirical analysis can give us more insight into how detrimental it can be. 
+
+\section*{Literature Review}
+
+There is a vast number of studies that have been done on the topic of substance use by adolescents. Cooke and Moore used the NLSY79, an earlier iteration of the survey we use in this work, to determine how alcohol use affects how long people stay in school. Their identification strategy involved using the beer tax and minimum purchase age as instruments for drinking. Their two main results were that drinking in high school leads to a decrease in years of higher education and an increase in the likelihood of dropping out. Moreover, students in states with higher taxes on beer were found to have a higher graduation rate, a result very applicable to public health policy \cite{COOK1993411}. 
+
+Models involving substance use in general have lots of endogeneity concerns, and instrumental variables is one technique that researchers have used. However, like instruments in most econometric analyses, the validity of these is always a concern. French and Popovici have a great survey paper on instruments in substance use research where they detail the huge variety. For just alcohol use, they found over 50 unique instrumental variables. Some are at the state level such as BAC limits and MLDA (minimum legal drinking age) and some are at the individual level such as having a parent with alcohol problems. \cite{french2011instrument} 
+
+Many of these studies had less options since their data was a cross section. Sometimes researchers are lucky enough to be able to exploit a natural experiment and use difference in differences as Marie and Zolitz did in their paper "High achievers?  cannabis access and academic  performance" \cite{high_achievers}. Another popular approach uses the fact that the minimum legal drinking age of 21 years introduces exogenous variation in alcohol consumption. This allows for a regression discontinuity design to be implemented \cite{Deza} \cite{CROST}. Panel data especially can be very useful as endogeneity can be addressed through fixed effects. 
+
+French and Popovici also have another work titled "Cannabis Use, Employment, and Income: Fixed-effects Analysis of Panel Data" where they examine cannabis use on future employment and income using individual effects \cite{popovici2014cannabis}. In contrast to Cooke and Moore, we take inspiration from this paper and create a fixed effect model. In their paper, they took a cross section and estimated alcohol's effect on income using ordinary least squares finding it to be statistically significant. However, once they used fixed effects, the statistical significance disappeared leading them to the conclusion that unobserved time invariant individual characteristics can lead to significant bias when using techniques normally reserved for cross sectional data. Therefore, some effects of cannabis use found by other studies could spurious. Our work will be doing something very similar. We will first estimate an effect using conventional OLS with various controls followed by implementation of individual fixed effects.
+
+
+\section*{Description of Data}
+
+To estimate the effect of alcohol use in high school on academic outcomes, we used data from the National Longitudinal Survey of Youth 1997. The survey is part of a larger program run by the Bureau of Labor Statistics to collect economic data on the American public. Beginning in 1997, the NLSY97 is given annually (now biannually) to a cohort of 8994 Americans born between 1980 and 1984 to gather information on topics such as employment, health, and relationships \cite{nls}. The sample is meant to be representative of the US population at the time in 1997 while also oversampling among minorities. One thing that it is known for is a high retention rate. In the years we consider, the retention rate does not go much below 90\%. The variables we use in our analysis are just a tiny subset of everything it has to offer. 
+
+\subsection*{Dependent Variable}
+The main outcome we will be focusing on is grade point average. Grade point average is aggregated for the whole academic year across all courses to a standard four point scale (reported in hundreds). Since this variable was collected directly from high school transcript data, we confine our analysis only to the high school years of each candidate which run from about 1993 to 2004 depending on the age of the respondent in 1997. We should note early on that although the data we use is a panel, it is unbalanced. For example, some respondents may only have GPA data for two of their four years in high school. In addition, since we look at data over a period greater than four years, observations of a respondent come in and out. This should not be a massive problem since the sample is split up about evenly across ages 12-16 with less people starting out at age 17 or 18. Hence there is nothing systematic about which observations are missing. However, this will still likely contribute extra error to our estimate and should be kept in mind when interpreting our results.
+
+\subsection*{Independent Variables}
+Data on alcohol use is split up among a few questions. We are concerned with the number of days drank in the previous 30 days.  The number of days drank in the past 30 is used to construct a new recoded variable that takes discrete values corresponding to "no use", "monthly use", "weekly use", and "daily use" as Popovici and French do in their analysis on marijuana use \cite{popovici2014cannabis}. This is an approximation based off one month of the year, but it should be reasonable to assume that drinking behavior doesn't change massively from month to month other than possibly in the summer. The advantage of splitting into groups is that alcohol likely has a cumulative effect. A priori, it would be a stretch to say that someone who drinks once a month is the same as someone who drinks daily.  
+
+Given that this is a survey where respondents self-report, it is natural to wonder how accurate the numbers are. Cook and Moore describe in their paper that self-responses are usually biased downward, but there are other studies that argue that the consistency of answers within the survey as well as compared to other surveys indicate the values are fairly reliable. On the other hand, a study by Shillington et al. provides strong evidence of a forward telescoping effect in responses to the onset of use (in later waves, respondents report first use as later than they did in earlier ones) \cite{telescope}. We find the assumption that the values are very accurate rather hard to believe and point out that the estimates may have more imprecision than shows up in the regressions themselves.
+
+Descriptive statistics for these as well as GPA and alcohol use can be seen in Table \ref{tab1}. For clarity, we will describe these briefly. GPA is in hundreds of points. On average, students are getting about a B- GPA. Frequency of drinking is defined as above. Based on the table, on average the students in this sample are drinking maybe once a month. Female is an indicator for being female. About half the sample is male and half is female. Non-White is an indicator for being a minority. About 43\% of the sample is not white. Age in 1997 is the average age of the sample in the first round. We have three indicators for ever having cigarettes, hard drugs, and marijuana respectively. These all seem reasonable as respondents apparently have used hard drugs the least and tobacco the most. Highest grade is the highest grade the respondent finished. These respondents on average would finish about two years of college. Parent Education gives the highest grade finished among both parents of the respondent. Again, it seems reasonable that parents on average would have finished less schooling given the increase in college attendance over United States history. Last, household income is the average income for the entire household the respondent lives in and consists of a few different measures (income from jobs, government assistance, etc.). This variable is arguably the worst one in the entire dataset as far as accuracy. These were self reported values by the respondent, and there were some strange numbers throughout.
+
+\input{descriptive_stats}
+
+\section*{Econometric Methods and Models}
+
+As we alluded to in the review of literature, our empirical analysis will proceed in two steps. The first will use OLS and not take advantage of the panel structure. We take the average grade point average of the student in high school and regress on their average alcohol use while in high school. In theory, we could have taken a cross section by just picking one year. However, it would have been difficult to find a year with enough respondents answering affirmative to alcohol use and with enough variation in the use for us to feel comfortable. The way we proceeded should still give us the general feel for the signs of the coefficients and the impact of unobserved variables. 
+
+In the second step, we estimate using individual fixed effects with slight variations in the exact specification of the model. These will be specified in the relevant section.
+
+\subsection*{Preliminary Model}
+We begin by creating a simple OLS model. In general, we have
+\begin{equation*}
+    GPA_{i} = \beta_0 + \beta_1A_{i} + \beta_2X_{i}' + \epsilon_{i}
+\end{equation*}
+where $GPA_i$ is grade point average, $A_i$ is alcohol use, and $X_i'$ is a vector of controls. We experimented with a couple specifications for alcohol use and will focus our attention on frequency of use since that is what will be used in the fixed effects model in the next section. Again, frequency of use is split into the categories "no use", "monthly use", "weekly use", and "daily use". From our review of literature, we know alcohol use can be correlated with many things including race, income, other more harmful substance use, and family composition \cite{family}. Even controlling for some of these categories, there are still concerns of omitted variable bias. For example, there may be a correlation between alcohol use and attitudes on education. Students that drink less may also care more about their studies in general and will have higher grades anyway causing an upward bias in our estimate on the effect of alcohol. This is a problem because we either have to create a proxy for this variable or accept that we cannot observe it. Luckily it is very plausible that attitudes on education are constant across time as well as many other confounding variables leading us to an improved identification strategy.
+
+\subsection*{Fixed Effects Model}
+To deal with endogeneity concerns stemming from omitted variable bias, we use time and individual fixed effects. A desirable quality of the NLSY97 dataset is its panel structure. This will allow us to control for effects of variables we do not observe assuming the variable is constant across time. In general, our model is
+\begin{equation*}
+    GPA_{it} = \alpha_i + \rho A_{it} + \epsilon_{it}
+\end{equation*}
+where $GPA_{it}$ is the GPA for individual i at time t, $\alpha_i$ is a measure of time invariant heterogeneity within individuals, and $A_{it}$ is alcohol use (defined the same way as in our simple OLS model) for individual i at time t. Since we have more than one time period, the coefficients on the fixed effects model are found by performing an entity-demeaned regression. STATA does this for us by using \textit{xtreg} with the \textit{fe} option. We also consider implementing time fixed effects, but decide to omit them from the analysis. We explain in the results.
+
+
+\section*{Results of Estimations}
+
+\subsection*{Non-Fixed Effects Model}
+
+As a baseline, we start with an OLS model using heteroscedastic robust standard errors and add various controls. In the first regression in the table, GPA is averaged across the years we have data for it for each individual and it is regressed on the average alcohol usage for that individual while in high school. We see that the coefficient on monthly drinker is positive but statistically insignificant at the 0.05 level. On the other hand, the coefficients on both weekly and daily drinker are negative and fairly large with -0.16 and -.4112 decreases in GPA on a four point scale respectively. These are also both statistically significant at the 0.05 level. As we alluded to in the methods section, there is almost certainly omitted variable bias and we see that adding controls across each model both flips the sign of the monthly drinker coefficient and changes the magnitude and significance of the coefficients on weekly and daily. 
+
+\input{OLS_main}
+
+This is evidence that we are not getting a causal effect. As a more quantitative heuristic, we ran the RESET test on each model other than the first (Appendix C). The null hypothesis of no omitted variables was rejected at the 0.001 level indicating at least one omitted variable for four of the six and for the other two, it failed to be rejected. Finally, we created residuals versus fitted plots for each model and found the scatter to be very random in each one. So, the error structure does not seem to be heteroscedastic and we are not very concerned about non-linearity. See Appendix D for the plot corresponding to the model with all the controls. Furthermore, see Appendix A for three more regressions that look at drug use, parent education, and household income independently as controls. Qualitatively, these produced similar results.
+
+\subsection*{Fixed Effects Model}
+
+Table \ref{tab3} contains two variations on our fixed effects model. In both, the coefficients on monthly, weekly, and daily drinker are negative but non significant at the 0.05 level. There is not evidence to suggest that relative to non-drinkers, there is a negative effect on grade point average. We include age in the second model to control for any heterogeneity that may come from changes in things like maturity and difficulty of school work over time. We do not include time fixed effects for two reasons. First, it is unlikely that there is some individual invariant effect that would change grade point averages over time. Grade point average is not like employment where it may suffer due to some big macroeconomic shock. Second, we did try them out in the model, but they did not qualitatively change anything, and an F test showed that they were not jointly significant. Hence we choose to omit them. Other variables we had data for were mostly time invariant, so they also were not included in the fixed effects regression. 
+
+One thought we considered is the possibility that we did not have enough data on heavier drinkers to get good estimates. We isolated our analysis to just non-drinkers and social drinkers and heavier drinkers and again did not get any statistically significant coefficients. See Appendix B for these regressions. 
+
+\input{FE_main}
+
+\section*{Discussion of Results}
+
+It was somewhat surprising to see that we got statistically significant results (to some extent) in our first models and then had the opposite happen with the fixed effects models. However, French and Popovici's paper corroborates these results albeit with a different substance in marijuana. One explanation we briefly described above is that in this data set, we were not looking at a ton of teens that drank very heavily. Specifically, a much smaller proportion of respondents in the sample were weekly and daily drinkers. It could be the case that these respondents' grades are actually influenced by their habit (in terms of what we know about heavy drinking on people's health, this should be the case), but this effect is hidden within the very moderate drinking most people in this sample were doing. Perhaps heavy drinkers were already bad students anyway and once we accounted for individual heterogeneity, the effect is insignificant. Another thought is that there could be some aspect of simultaneous causality where poor outcomes in school lead to drinking and vice versa. Finally, it is not out of the realm of possibility that there are still unobserved effects that vary by both time and individual. Hypothetically, maybe the dot com boom and other technology led to teens in later years studying less while their aging led to differing attitudes on studying. It is not super easy to come up with a story, but we should not rule it out. 
+
+We also were making a lot of assumptions in creating variables along the way. Lumping the alcohol use into the categories we did made sense although it also reduces the variation that was initially there. That being said, ideally the use of individual fixed effects should have partialed away the heterogeneity of these groups, and we showed that when focusing in on the use categories, nothing changed. At the end of the day, we can likely attribute a lot of error to the quality of the data and the imprecision imposed by errors from self reporting. 
+
+To briefly address external validity, the careful manner in which the NLSY97 is crafted to be representative of the American adolescent population bodes well for external validity. For robustness, it would be interesting to use a similar survey from a different organization and see if the the results are qualitatively similar. 
+
+
+\section*{Conclusion}
+
+The purpose of our analysis was to develop more insight into how alcohol use by teenagers affects their academic performance. We proxied for academic performance by using grade point average. The initial model using OLS as a baseline gave statistically significant effects of alcohol use, but the addition of various controls demonstrated endogeneity concerns specifically due to omitted variable bias. To counteract this, we used individual fixed effects as our identification strategy in order to help resolve this problem. Individual fixed effects remove time invariant effects that vary at the individual level that are omitted from the model. In this case, the effect on grade point average was not statistically significant. The final conclusion of our analysis is that we did not find strong evidence that alcohol negatively effects grades. 
+
+Future research could go in a few different directions. First, there is a lot of work to still be done to address the internal validity of our models. The same analysis in this work could be done using instrumental variables as a robustness check. Another measure of alcohol use could be used that addresses the measurement error endemic to the error in our models. Second, we could look at other measures of academic perforance such as attendance. We could continue to look at alcohol use by teens but instead of looking at short term academic effects, we look at longer term effects on college attendance and or employment. These could be estimated with the same data set and using logit models with fixed effects as Popovici and French do in the second part of their paper. Finally, alcohol is not the only substance teens use. It would be very relevant to examine other drugs, their association with alcohol use, and their influence on any of the measures we have just discussed. A very relevant one today would be opioid use which is seeing more and more popularity in America among all age groups. At the end of the day, the cost to society of treating drug abuse is high enough that any research into any of these topics will be invaluable to policy makers working to create a healthier American public. 
+
+
+\newpage
+
+\bibliographystyle{unsrt}
+\bibliography{preliminary_references}
+
+\newpage 
+
+\section*{Appendix A}
+
+\input{OLS_extended}
+
+\newpage
+
+\section*{Appendix B}
+
+\input{FE_secondary}
+
+\newpage
+
+\section*{Appendix C}
+
+Below are the results of the RESET test for each regression run in the first step of the project. Specifications three and four are the only ones to fail to reject the model having no omitted variables. Everything else does reject. This implies that there could be non-linear effects and or other variables that better approximate the model.
+
+\begin{enumerate}
+\setcounter{enumi}{1}
+
+\item
+Ramsey RESET test using powers of the fitted values of GPA \\
+       \indent Ho:  model has no omitted variables \\
+                \indent F(3, 5995) =      6.67 \\
+                   \indent Prob $>$ F =      0.0002 \\
+\item
+\noindent Ramsey RESET test using powers of the fitted values of GPA \\
+      \indent Ho:  model has no omitted variables \\
+                \indent F(3, 5995) =      0.98 \\
+                   \indent Prob $>$ F =      0.4005 \\
+
+\item
+\noindent Ramsey RESET test using powers of the fitted values of GPA \\
+       \indent Ho:  model has no omitted variables \\
+              \indent  F(3, 5993) =      0.98 \\
+             \indent     Prob $>$ F =      0.4022 \\
+
+\item
+\noindent Ramsey RESET test using powers of the fitted values of GPA \\
+   \indent    Ho:  model has no omitted variables \\
+          \indent      F(3, 5995) =     70.19 \\
+           \indent       Prob $>$ F =      0.0000 \\
+
+\item
+\noindent Ramsey RESET test using powers of the fitted values of GPA \\
+      \indent Ho:  model has no omitted variables \\
+           \indent     F(3, 5011) =     24.55 \\
+             \indent     Prob $>$ F =      0.0000 \\
+
+\item
+\noindent Ramsey RESET test using powers of the fitted values of GPA \\
+    \indent   Ho:  model has no omitted variables \\
+          \indent      F(3, 5005) =     18.80 \\
+            \indent      Prob $>$ F =      0.0000 \\
+
+\end{enumerate}
+
+
+\newpage
+
+\section*{Appendix D}
+\begin{figure}[h!]
+    \centering
+    \includegraphics{OLSRVF.eps}
+    \caption{Residuals VS. Fitted Plot for the OLS model with all controls}
+    \label{fig:OLSRVF}
+\end{figure}
+
+\newpage
+
+\end{document}
+
