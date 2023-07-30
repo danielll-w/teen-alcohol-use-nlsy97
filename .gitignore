@@ -4,7 +4,6 @@
 *.eps
 *.tex
 *.png
-*.pdf
 
 !manuscript/main.tex
 !manuscript/preliminary_references.bib
